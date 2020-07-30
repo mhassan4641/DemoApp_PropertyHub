@@ -1,0 +1,158 @@
+﻿@using EVS370
+@using Microsoft.AspNetCore.Http
+@using EVS370.PropertyHub.WebUI.Models
+
+@{
+    string cookie = Context.Request.Cookies[WebUtil.USER_COOKIE];
+    if (!string.IsNullOrWhiteSpace(cookie))
+    {
+        string[] userData = cookie.Split(",");
+        UserModel userModel = new UsersHandler().GetUser(userData[0], userData[1]).ToModel();
+        if (userModel != null)
+        {
+            Context.Response.Cookies.Append(
+            key: WebUtil.USER_COOKIE,
+            value: $"{userData[0]},{userData[1]}",
+            options: new CookieOptions { Expires = DateTime.Today.AddDays(7), IsEssential = true }
+         );
+            Context.Session.Set(WebUtil.CURRENT_USER, userModel);
+        }
+    }
+    UserModel currentUser = Context.Session.Get<UserModel>(WebUtil.CURRENT_USER);
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - PropertyHub</title>
+    <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/lib/font-awesome/css/font-awesome.css" rel="stylesheet" />
+    <link href="~/css/main.css" rel="stylesheet" />
+    @RenderSection("mycss", false)
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-sm navbar-light bg-light">
+        <a class="navbar-brand" asp-action="index" asp-controller="home"><i class="fa fa-building"></i> PropertyHub</a>
+        <button class="navbar-toggler d-lg-none" type="button" data-toggle="collapse" data-target="#mainmenu">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="mainmenu">
+            <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+                <li class="nav-item active"><a class="nav-link" asp-action="index" asp-controller="home"><i class="fa fa-home"></i> Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="#"><i class="fa fa-tags"></i> Residential</a></li>
+                <li class="nav-item"><a class="nav-link" href="#"><i class="fa fa-tags"></i> Commercial</a></li>
+                <li class="nav-item"><a class="nav-link" href="#"><i class="fa fa-tags"></i> Industerial</a></li>
+                <li class="nav-item"><a id="postadvlink" asp-action="post" asp-controller="advertizements" class="nav-link"><i class="fa fa-edit"></i> Post Adv</a></li>
+            </ul>
+            <ul class="navbar-nav">
+                @if (currentUser != null)
+                {
+                    <li class="nav-item">
+                        <a asp-action="login" asp-controller="users" class="nav-link">
+                            <i class="fa fa-sign-in"></i>  @currentUser.Name
+                        </a>
+                    </li>
+                }
+                else
+                {
+                    <li class="nav-item">
+                        <a asp-action="login" asp-controller="users" class="nav-link">
+                        <i class="fa fa-sign-in"></i> Log In
+                        </a>
+                </li>
+                    <li class="nav-item">
+                <a asp-action="signup" asp-controller="users" class="nav-link">
+                        <i class="fa fa-user"></i> Sign Up
+                </a>
+                    </li>
+                }
+            </ul>
+        </div>
+    </nav>
+
+    <main>
+        <div class="container-fluid">
+            <div class="mt-3">
+                @RenderBody()
+            </div>
+        </div>
+    </main>
+
+
+    <div class="modal fade" id="advdialog" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 id="advdialog-title" class="modal-title"></h5>
+                    <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+                </div>
+                <div id="advdialog-body" class="modal-body">
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script type="text/javascript">
+        //show adv details
+        $("#postadvlink").click(function (event) {
+            event.preventDefault();
+            var url = $(this).attr("href");
+            $.ajax(
+                {
+                    url: url
+                }
+            ).done(function (postadvform) {
+                //show post adv modal dialog
+                $("#advdialog-title").text("Post Advertizement");
+                $("#advdialog-body").html(postadvform);
+                $("#advdialog").modal();
+                //countries - cities - neighborhood areas
+                $("#countriesddl").change(function () {
+                    var countryId = $(this).val();
+                    $.ajax(
+                        {
+                            url: "/locations/CitiesDDL/" + countryId
+                        }
+                    ).done(function (cities) {
+                        $("#div4cities").html(cities);
+                        $("#citiesddl").change(function () {
+                            var cityId = $(this).val();
+                            $.ajax(
+                                {
+                                    url: "/locations/NeighborhoodsDDL/" + cityId
+                                }
+                            ).done(function (neighborhoods) {
+                                $("#div4neighborhood").html(neighborhoods);
+                            });
+                        });
+                    });
+                });
+                //add and remove controls for images
+                $("#addphbtn").click(function () {
+                    var temp = "<div class='row data-row photorow'>"
+                        + "<div class='col-4'><input name='phcaption' type='text' class='form-control'/></div>"
+                        + "<div class='col-6'><input name='phfile' type='file'/></div>"
+                        + "<div class='col-2'><button type='button' class='btn btn-danger btn-sm btn-phremove'> <i class='fa fa-trash'></i></button></div>"
+                        + "</div>";
+                    $("#photosgrid").append(temp);
+
+                    $(".btn-phremove").click(function () {
+                        $(this).parents(".photorow").remove();
+                    });
+                });
+
+            });
+        });
+    </script>
+    @RenderSection("myscript", false)
+</body>
+</html>

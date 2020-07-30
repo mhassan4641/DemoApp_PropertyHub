@@ -1,0 +1,98 @@
+﻿@model IEnumerable<NeighborhoodModel>
+
+@{
+    ViewData["Title"] = "Manage";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+@*<partial name="~/Views/Shared/_PartialView1.cshtml" />*@
+
+
+    <div class="modal fade" id="mydialog" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 id="mydialog-title" class="modal-title"></h5>
+                    <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+                </div>
+                <div id="mydialog-body" class="modal-body">
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div>
+        <div class="caption-row bg-primary text-white">
+            <div class="row">
+                <div class="col-12">
+                    <span>Manage Neighborhood Areas</span>
+                    <span>[ <a id="createlink" asp-action="create" asp-controller="neighborhood" data-dlgtitle="Add New Neighborhood Area" class="text-white"  >Add New</a> ]</span>
+                </div>
+            </div>
+        </div>
+        <div class="head-row bg-primary text-white">
+            <div class="row">
+                <div class="col-1">Image</div>
+                <div class="col-4">Neighborhood</div>
+                <div class="col-3">City</div>
+                <div class="col-4">Actions</div>
+            </div>
+        </div>
+        @foreach (var m in Model)
+        {
+            <div class="data-row">
+                <div class="row">
+                    <div class="col-1">
+                        @if (!string.IsNullOrEmpty(m.Image))
+                        {
+                            <img src="data:image/jpg;base64,@m.Image" alt="image" class="dgimage" />
+                        }
+                    </div>
+                    <div class="col-4">@m.Name</div>
+                    <div class="col-3">@m.City.Name</div>
+                    <div class="col-4">
+                        <a asp-action="edit" asp-controller="neighborhood" asp-route-id="@m.Id" data-dlgtitle="Edit Neighborhood Area" class="btn btn-warning btn-sm dgbtn-edit"><i class="fa fa-edit"></i></a>
+                        <a asp-action="delete" asp-controller="neighborhood" asp-route-id="@m.Id" data-dlgtitle="Do you want to delete this record?" class="btn btn-danger btn-sm dgbtn-delete"><i class="fa fa-trash"></i></a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+@section myscript {
+    <script type="text/javascript" >
+
+        //var obj = { "Id": 1, "Name": "Category-1" };
+        //$.get("/neighborhood/create", function (result) { alert(result); })
+        //$.post("/neighborhood/create", JSON.stringify(obj), function (result) { alert(result); })
+        //$.getJSON("/neighborhood/create", function (result) { alert(result); })
+        //$("#div1").load("/neighborhood/create")
+        //$.ajax(
+        //    {
+        //        url: "/neighborhood/create",
+        //        type: "post",
+        //        contentType: "application/json",
+        //        data: JSON.stringify(obj)
+        //    }
+        //)
+        //    .done(function (result) { alert(result); })
+        //    .error(function (message) { alert(message); });
+
+
+        $("#createlink,.dgbtn-edit,.dgbtn-delete").click(function (e) {
+            e.preventDefault();
+            var url = $(this).attr("href");
+            var title = $(this).data("dlgtitle");
+            $.ajax(
+                {
+                    url: url
+                }
+            ).done(function (result) {
+                $("#mydialog-title").text(title);
+                $("#mydialog-body").html(result);
+                $("#mydialog").modal();
+            });
+        });
+    </script>
+}

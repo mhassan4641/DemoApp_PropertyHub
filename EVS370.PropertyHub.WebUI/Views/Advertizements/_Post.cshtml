@@ -1,0 +1,109 @@
+﻿@model PropertyAdvModel
+
+@{
+    List<SelectListItem> countries = (List<SelectListItem>)ViewData["Countries"];
+    List<SelectListItem> areaUnits = (List<SelectListItem>)ViewData["AreaUnits"];
+    List<SelectListItem> advTypes = (List<SelectListItem>)ViewData["AdvTypes"];
+}
+
+<form id="createform" asp-action="post" asp-controller="advertizements" method="post" enctype="multipart/form-data">
+    <ul class="nav nav-tabs">
+        <li class="nav-item"> <a class="nav-link active" href="#general" data-toggle="tab">General</a></li>
+        <li class="nav-item"> <a class="nav-link" href="#description" data-toggle="tab">Description</a></li>
+        <li class="nav-item"> <a class="nav-link" href="#images" data-toggle="tab">Images</a> </li>
+    </ul>
+    <div class="tab-content">
+        <div id="general" class="tab-pane active mytab-pane">
+            <div class="form-group form-inline">
+                <div class="input-group p-0 col">
+                    <span class="input-group-prepend">
+                        <label class="input-group-text"><i class="fa fa-map-marker"></i></label>
+                    </span>
+                    <select id="countriesddl" class="form-control" asp-items="@countries">
+                    </select>
+                </div>
+                <div id="div4cities" class="input-group col">
+                </div>
+                <div id="div4neighborhood" class="input-group col">
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="input-group">
+                    <span class="input-group-prepend">
+                        <label class="input-group-text"><i class="fa fa-edit"></i></label>
+                    </span>
+                    <input type="text" class="form-control" asp-for="Name" placeholder="Name" />
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="input-group p-0 col-4">
+                    <span class="input-group-prepend">
+                        <label class="input-group-text"><strong>Rs.</strong></label>
+                    </span>
+                    <input type="number" min="0" step="1000" class="form-control" asp-for="Price" placeholder="Price" />
+                </div>
+            </div>
+            <div class="form-group form-inline">
+                <div class="input-group p-0 col-3">
+                    <span class="input-group-prepend">
+                        <label class="input-group-text"><i class="fa fa-arrow-circle-right"></i></label>
+                    </span>
+                    <input type="number" min="1" step="1" class="form-control" asp-for="Area.value" placeholder="Area" />
+                </div>
+                <div class="input-group col-5">
+                    <span class="input-group-prepend">
+                        <label class="input-group-text"><i class="fa fa-arrow-circle-right"></i></label>
+                    </span>
+                    <select class="form-control" asp-for="Area.Unit.Id" asp-items="@areaUnits"></select>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="input-group p-0 col-4">
+                    <span class="input-group-prepend">
+                        <label class="input-group-text"><i class="fa fa-calendar"></i></label>
+                    </span>
+                    <input type="date" class="form-control" asp-for="ActiveTill" placeholder="Active Till" />
+                </div>
+            </div>
+            <div>
+                @foreach (var a in advTypes)
+                {
+                    <div class="form-check form-check-inline">
+                        <label><input name="advtype" type="radio" value="@a.Value" /> @a.Text</label>
+                    </div>
+                }
+            </div>
+
+        </div>
+        <div id="description" class="tab-pane mytab-pane">
+            <div class="form-group">
+                <textarea asp-for="@Model.Description" class="form-control" rows="10"></textarea>
+            </div>
+        </div>
+        <div id="images" class="tab-pane mytab-pane">
+            <div class="form-group">
+                <div id="photosgrid">
+                    <div class="row data-row photorow">
+                        <div class="col-4">
+                            <input name="phcaption" type="text" class="form-control" />
+                        </div>
+                        <div class="col-6">
+                            <input name="phfile" type="file" />
+                        </div>
+                        <div class="col-2">
+                            <button id="addphbtn" type="button" class="btn btn-primary btn-sm"> <i class="fa fa-plus"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">
+            <i class="fa fa-arrow-circle-right"></i>  Add Advertizement
+        </button>
+    </div>
+</form>
+
+

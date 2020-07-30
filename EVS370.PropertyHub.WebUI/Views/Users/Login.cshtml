@@ -1,0 +1,58 @@
+﻿@model UserModel
+
+@{
+    ViewData["Title"] = "Login";
+    Layout = "~/views/shared/_Layout.cshtml";
+    string temp = ViewBag.ReturnUrl;
+}
+
+<div style="margin:50px;" >
+    <div class="row">
+        <div class="col-6 offset-3">
+            <div class="card">
+                <div class="card-body">
+                    <div class="card-title">
+                        <i class="fa fa-sign-in"></i> Login
+                    </div>
+                    <form id="loginform" action="~/users/login?@ViewBag.ReturnUrl" method="post">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <span class="input-group-prepend">
+                                    <label class="input-group-text">
+                                        <span class="fa fa-user"></span>
+                                    </label>
+                                </span>
+                                <input asp-for="LoginId" type="text" class="form-control" placeholder="Login Id" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="input-group">
+                                <span class="input-group-prepend">
+                                    <label class="input-group-text">
+                                        <span class="fa fa-key"></span>
+                                    </label>
+                                </span>
+                                <input asp-for="Password" type="password" class="form-control" placeholder="Password" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <button id="loginbutton" type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-log-in"></span> Login</button>
+                            <button type="reset" class="btn btn-outline-primary"><span class="glyphicon glyphicon-refresh"></span> Cancel</button>
+                        </div>
+                        <div class="form-group">
+                            <div class="checkbox">
+                                <label>
+                                    <input name="rememberme" type="checkbox" /> Remember me
+                                </label>
+                            </div>
+                        </div>
+                    </form>
+                    <p class="text-sm-right">
+                        Not registered.
+                        <a asp-action="Signup" asp-controller="Users" class="text-dark">SignUp here</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

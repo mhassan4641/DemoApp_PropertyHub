@@ -1,0 +1,8 @@
+﻿@model DDListModel
+
+<span class="input-group-prepend">
+    <label class="input-group-text"><i class="fa @Model.Icon"></i></label>
+</span>
+<select id="@Model.Name" name="@Model.Name" class="form-control" asp-items="@Model.Items">
+</select>
+

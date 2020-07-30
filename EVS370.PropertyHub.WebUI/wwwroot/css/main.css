@@ -1,0 +1,43 @@
+﻿.advsum a {
+    text-decoration: none;
+    color: #212529;
+}
+
+.dgimage {
+    width: 20px;
+    height: 20px;
+}
+
+.mytab-pane {
+    padding-top: 15px;
+    /*border-left: solid 1px #ddd;
+    border-right: solid 1px #ddd;
+    border-bottom: solid 1px #ddd;*/
+}
+
+.caption-row {
+    padding: 10px;
+    border-bottom: solid 2px #ffffff;
+    font-size: 105%;
+}
+
+
+.head-row {
+    font-size: 105%;
+    padding: 10px;
+}
+
+.data-row {
+    padding: 5px;
+}
+
+
+.control-error {
+    background-color: red;
+    padding: 1px;
+}
+
+.control-success {
+    background-color: yellowgreen;
+    padding: 1px;
+}

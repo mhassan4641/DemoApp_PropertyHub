@@ -1,0 +1,68 @@
+﻿@model SignupModel
+@{ 
+    ViewData["Title"] = "Sign Up";
+    Layout = "~/views/shared/_Layout.cshtml";
+}
+
+<div >
+    <div class="offset-3">
+        <div class="card bg-light col-8" style="margin-top: 5%;">
+            <div class="card-title align-self-center">
+                <h3 class="text-dark m-2">Sign Up Here</h3>
+            </div>
+            <div class="card-body">
+                <form method="post" action="~/users/signup">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <span class="input-group-prepend ">
+                                <span class="input-group-text text-light bg-dark ">Full Name</span>
+                            </span>
+                            <input type="text" asp-for="fullName" class="form-control" placeholder="Full Name" required/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="input-group">
+                            <span class="input-group-prepend">
+                                <span class="input-group-text text-light bg-dark">E-mail</span>
+                            </span>
+                            <input  type="number" asp-for="contactNum" class="form-control" placeholder="Mobile Number or Login Id" required/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="input-group">
+                            <span class="input-group-prepend">
+                                <span class="input-group-text text-light bg-dark">Date of Birth</span>
+                            </span>
+                            <input  type="date" asp-for="BirthDate" class="form-control" placeholder="Date of Birth" required/>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="input-group">
+                            <span class="input-group-prepend">
+                                <span class="input-group-text text-light bg-dark">Password</span>
+                            </span>
+                            <input id="password" type="password" asp-for="password"class="form-control" placeholder="Password" required />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="input-group">
+                            <span class="input-group-prepend">
+                                <span class="input-group-text text-light bg-dark">Confirm Password</span>
+                            </span>
+                            <input id="cpassword" type="password" class="form-control" placeholder="Confirm Password" required/>
+                        </div>
+                    </div>
+                    <br>
+                    <button class="btn btn-dark"  type="submit">Sign Up</button>
+                    <p class="text-sm-right">
+                        Already have an account. Login
+                        <a asp-action="login" asp-controller="users" class="text-dark">here</a>
+                    </p>
+
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>

@@ -1,0 +1,97 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+    List<PropertyAdvModel> topAdvs = (List<PropertyAdvModel>)ViewData["TopAdvs"];
+}
+
+<div class="container-fluid" id="adminadDetails">
+    <div class="row">
+        @foreach (var adv in topAdvs)
+        {
+            <div class="advsum col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
+                <div class="card" style=" margin:15px auto;">
+                    <a asp-action="details" asp-controller="advertizements" asp-route-id="@adv.Id" class="lnk-advdetails" title="@adv.Name">
+                        @if (adv.Images.Count > 0)
+                        {
+                            <img src="data:image/jpg;base64,@adv.Images.First()" style="height:250px"
+                                 class="card-img card-img-top" alt="adv" />
+                        }
+                        <div class="card-body">
+                            <h4 class="card-title">@adv.Name</h4>
+                            <p class="card-text text-truncate">@adv.Description</p>
+                        </div>
+                    </a>
+                    <div style="margin-left:20%;">
+                        <a data-toggle="modal" id="acceptAdv" asp-action="AcceptAdv" asp-controller="advertizements" asp-route-id="@adv.Id" class="btn btn-primary m-2 accept" >
+                        Accept
+                        </a>
+                        <a data-toggle="modal" id="rejectAdv" asp-action="RejectAdv" asp-controller="advertizements" asp-route-id="@adv.Id" class="btn btn-danger reject" >
+                        Reject
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@section myscript{
+    <script>
+            $(".lnk-advdetails").click(function (event) {
+            event.preventDefault();
+            var url = $(this).attr("href");
+            var title = $(this).attr("title");
+            $.ajax(
+                {
+                    url: url
+                }
+            ).done(function (advdetails) {
+                //show details adv modal dialog
+                $("#advdialog-title").text(title);
+                $("#advdialog-body").html(advdetails);
+                $("#advdialog").modal();
+            });
+            }); 
+            $(".accept").click(function (event) {
+            event.preventDefault();
+            var url = $(this).attr("href");
+            var title = "Accepted";
+            $.ajax(
+                {
+                    url: url
+                }
+            ).done(function (Accepted) {
+                //show details adv modal dialog
+                $(".modal-dialog").addClass("modal-sm");
+                $(".modal-dialog").removeClass("modal-lg");
+                $("#advdialog-title").text(title);
+                $("#advdialog-body").html(Accepted);
+                $("#advdialog").modal();
+            }).done(function () {
+                location.reload(true);
+            });
+
+                
+         });
+        $(".reject").click(function (event) {
+            event.preventDefault();
+            var url = $(this).attr("href");
+            var title = "Rejected";
+            $.ajax(
+                {
+                    url: url,
+                }
+            ).done(function (Rejected) {
+                //show details adv modal dialog
+                $(".modal-dialog").addClass("modal-sm");
+                $(".modal-dialog").removeClass("modal-lg");
+                $("#advdialog-title").text(title);
+                $("#advdialog-body").html(Rejected);
+                $("#advdialog").modal();
+            }).done(function () {
+                location.reload();
+              });
+        });
+    </script>
+}

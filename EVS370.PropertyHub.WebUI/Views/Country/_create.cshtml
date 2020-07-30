@@ -1,0 +1,25 @@
+﻿@model CountryModel
+
+    <form id="createform" asp-controller="Country" asp-action="create" method="post">
+        <div class="form-group">
+            <div class="input-group">
+                <span class="input-group-prepend">
+                    <label class="input-group-text"><i class="fa fa-product-hunt"></i></label>
+                </span>
+                <input type="text" class="form-control" asp-for="Code" placeholder="Country Code" />
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="input-group">
+                <span class="input-group-prepend">
+                    <label class="input-group-text"><i class="fa fa-map-marker"></i></label>
+                </span>
+                <input type="text" class="form-control" asp-for="Name" placeholder="Country Name" />
+            </div>
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-dark">
+                <i class="fa fa-arrow-circle-right"></i>  Add
+            </button>
+        </div>
+    </form>
